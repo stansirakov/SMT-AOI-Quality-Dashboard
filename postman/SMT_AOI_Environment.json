@@ -1,0 +1,41 @@
+{
+  "id": "smt-aoi-environment",
+  "name": "SMT AOI Dashboard - Local",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "test_board_id",
+      "value": "",
+      "type": "default",
+      "enabled": true,
+      "description": "Auto-set by 'Create Board Master Entry' request"
+    },
+    {
+      "key": "test_action_id",
+      "value": "",
+      "type": "default",
+      "enabled": true,
+      "description": "Auto-set by 'Create Action' request"
+    },
+    {
+      "key": "test_user_id",
+      "value": "",
+      "type": "default",
+      "enabled": true,
+      "description": "Auto-set by 'Create New User' request"
+    },
+    {
+      "key": "test_session_id",
+      "value": "",
+      "type": "default",
+      "enabled": true,
+      "description": "Auto-set by 'Get All Sessions' request"
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

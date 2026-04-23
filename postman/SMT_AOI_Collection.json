@@ -1,0 +1,1058 @@
+{
+  "info": {
+    "name": "SMT AOI Quality Dashboard API",
+    "description": "Complete API test collection for SMT AOI Quality Dashboard.\nIncludes positive and negative test cases for all endpoints.\n\nSetup:\n1. Import this collection in Postman\n2. Import the Environment file (SMT_AOI_Environment.json)\n3. Start the Flask app: python app.py\n4. Run 'Login as Admin' first to set the session cookie",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "smt-aoi-dashboard-v1"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Authentication",
+      "description": "Login, logout, session management and password change",
+      "item": [
+        {
+          "name": "Login - Admin (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has username', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.username).to.eql('admin');",
+                  "});",
+                  "",
+                  "pm.test('Response has role admin', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.role).to.eql('admin');",
+                  "});",
+                  "",
+                  "pm.test('Response has full_name', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('full_name');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Editor (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Role is editor', function() {",
+                  "    pm.expect(pm.response.json().role).to.eql('editor');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"smt_eng\",\n    \"password\": \"smt123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Viewer (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Role is viewer', function() {",
+                  "    pm.expect(pm.response.json().role).to.eql('viewer');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"viewer\",\n    \"password\": \"view123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Invalid Password (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 Unauthorized', function() {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('Error message present', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('error');",
+                  "});",
+                  "",
+                  "pm.test('No username in response', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.not.have.property('username');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"wrongpassword\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Empty Fields (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 Bad Request', function() {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Error message present', function() {",
+                  "    pm.expect(pm.response.json()).to.have.property('error');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"\",\n    \"password\": \"\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Authenticated true', function() {",
+                  "    pm.expect(pm.response.json().authenticated).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('Has username, role, full_name', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.all.keys('authenticated', 'username', 'role', 'full_name');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/auth/me"
+          }
+        },
+        {
+          "name": "Get Me - Not Authenticated (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 with authenticated false', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.json().authenticated).to.be.false;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Cookie", "value": "session=invalid_session_token"}],
+            "url": "{{base_url}}/api/auth/me"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('ok is true', function() {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Board Master",
+      "description": "CRUD operations for PCB configuration",
+      "item": [
+        {
+          "name": "Get All Board Master",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response time under 500ms', function() {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/board-master"
+          }
+        },
+        {
+          "name": "Create Board Master Entry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has id', function() {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.test('Board key matches', function() {",
+                  "    pm.expect(pm.response.json().board_key).to.eql('99999TEST');",
+                  "});",
+                  "",
+                  "pm.test('Project matches', function() {",
+                  "    pm.expect(pm.response.json().project).to.eql('TEST_PROJECT');",
+                  "});",
+                  "",
+                  "// Save ID for update/delete tests",
+                  "var json = pm.response.json();",
+                  "pm.environment.set('test_board_id', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"board_key\": \"99999TEST\",\n    \"project\": \"TEST_PROJECT\",\n    \"subboards\": 8,\n    \"pair\": \"\",\n    \"has_ict\": false,\n    \"has_depaneling\": false,\n    \"notes\": \"Test entry - can be deleted\"\n}"
+            },
+            "url": "{{base_url}}/api/board-master"
+          }
+        },
+        {
+          "name": "Create Board Master - Duplicate Key (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 Conflict', function() {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test('Error message about duplicate', function() {",
+                  "    pm.expect(pm.response.json().error).to.include('99999TEST');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"board_key\": \"99999TEST\",\n    \"project\": \"DUPLICATE_TEST\",\n    \"subboards\": 4\n}"
+            },
+            "url": "{{base_url}}/api/board-master"
+          }
+        },
+        {
+          "name": "Create Board Master - Missing Fields (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 Bad Request', function() {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('Error message present', function() {",
+                  "    pm.expect(pm.response.json()).to.have.property('error');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"board_key\": \"INCOMPLETE\"\n}"
+            },
+            "url": "{{base_url}}/api/board-master"
+          }
+        },
+        {
+          "name": "Update Board Master Entry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Subboards updated to 16', function() {",
+                  "    pm.expect(pm.response.json().subboards).to.eql(16);",
+                  "});",
+                  "",
+                  "pm.test('has_ict updated to true', function() {",
+                  "    pm.expect(pm.response.json().has_ict).to.eql(1);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"project\": \"TEST_PROJECT_UPDATED\",\n    \"subboards\": 16,\n    \"has_ict\": true,\n    \"notes\": \"Updated via Postman test\"\n}"
+            },
+            "url": "{{base_url}}/api/board-master/{{test_board_id}}"
+          }
+        },
+        {
+          "name": "Delete Board Master Entry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('ok is true', function() {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/board-master/{{test_board_id}}"
+          }
+        },
+        {
+          "name": "Board Master - Unauthorized (Viewer) (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 or 403', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"board_key\": \"UNAUTH_TEST\",\n    \"project\": \"TEST\",\n    \"subboards\": 4\n}"
+            },
+            "url": "{{base_url}}/api/board-master",
+            "description": "Login as viewer first, then run this request"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Sessions",
+      "description": "AOI upload session management",
+      "item": [
+        {
+          "name": "Get All Sessions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "if (pm.response.json().length > 0) {",
+                  "    pm.test('Session has required fields', function() {",
+                  "        var s = pm.response.json()[0];",
+                  "        pm.expect(s).to.have.all.keys('id', 'label', 'lot', 'date_range', 'record_count', 'uploaded_by', 'created_at');",
+                  "    });",
+                  "    pm.environment.set('test_session_id', pm.response.json()[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/sessions"
+          }
+        },
+        {
+          "name": "Delete Session - Unauthorized (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 or 403', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/sessions/99999",
+            "description": "Login as viewer/editor first, then run"
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Data & KPI",
+      "description": "AOI raw data and KPI calculations",
+      "item": [
+        {
+          "name": "Get All Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has raw, lots, sessions', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.all.keys('raw', 'lots', 'sessions');",
+                  "});",
+                  "",
+                  "pm.test('raw is array', function() {",
+                  "    pm.expect(pm.response.json().raw).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('lots is array', function() {",
+                  "    pm.expect(pm.response.json().lots).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response time under 2000ms', function() {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/data"
+          }
+        },
+        {
+          "name": "Get KPI Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has kpis array', function() {",
+                  "    pm.expect(pm.response.json().kpis).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response has pareto data', function() {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('pareto_type');",
+                  "    pm.expect(json).to.have.property('pareto_ref');",
+                  "    pm.expect(json).to.have.property('pareto_project');",
+                  "});",
+                  "",
+                  "if (pm.response.json().kpis.length > 0) {",
+                  "    pm.test('KPI entry has required fields', function() {",
+                  "        var k = pm.response.json().kpis[0];",
+                  "        pm.expect(k).to.have.property('project');",
+                  "        pm.expect(k).to.have.property('ppy_pct');",
+                  "        pm.expect(k).to.have.property('fpy_pct');",
+                  "        pm.expect(k).to.have.property('scrap_pct');",
+                  "    });",
+                  "",
+                  "    pm.test('PPY between 0 and 100', function() {",
+                  "        pm.response.json().kpis.forEach(function(k) {",
+                  "            pm.expect(k.ppy_pct).to.be.within(0, 100);",
+                  "        });",
+                  "    });",
+                  "",
+                  "    pm.test('FPY between 0 and 100', function() {",
+                  "        pm.response.json().kpis.forEach(function(k) {",
+                  "            pm.expect(k.fpy_pct).to.be.within(0, 100);",
+                  "        });",
+                  "    });",
+                  "",
+                  "    pm.test('Scrap between 0 and 100', function() {",
+                  "        pm.response.json().kpis.forEach(function(k) {",
+                  "            pm.expect(k.scrap_pct).to.be.within(0, 100);",
+                  "        });",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/kpi"
+          }
+        },
+        {
+          "name": "Get Data - Not Authenticated (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 Unauthorized', function() {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Cookie", "value": "session=invalid"}],
+            "url": "{{base_url}}/api/data"
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - ICT Data",
+      "description": "Manual ICT and Depaneling NG entry",
+      "item": [
+        {
+          "name": "Get ICT Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/ict"
+          }
+        },
+        {
+          "name": "Save ICT NG Value",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('ok is true', function() {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"lot\": \"TEST_LOT\",\n    \"board_key\": \"99999TEST\",\n    \"ict_ng\": 5,\n    \"depaneling_ng\": 2\n}"
+            },
+            "url": "{{base_url}}/api/ict"
+          }
+        },
+        {
+          "name": "Save ICT - Missing Fields (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 Bad Request', function() {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ict_ng\": 5\n}"
+            },
+            "url": "{{base_url}}/api/ict"
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Action Plan",
+      "description": "CRUD for defect corrective actions",
+      "item": [
+        {
+          "name": "Get All Actions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/actions"
+          }
+        },
+        {
+          "name": "Create Action",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Action has id', function() {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.test('Status is R (Open)', function() {",
+                  "    pm.expect(pm.response.json().status).to.eql('R');",
+                  "});",
+                  "",
+                  "pm.environment.set('test_action_id', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"problem\": \"[Postman Test] R1 Bridge recurring in 5 lots - Variant 12144846\",\n    \"action\": \"Adjust solder paste aperture by 10%\",\n    \"variant\": \"12144846\",\n    \"reference\": \"R1\",\n    \"defect_type\": \"Bridge\",\n    \"lots\": \"A04454, A04455\",\n    \"owner\": \"SMT Engineer\",\n    \"target_date\": \"2026-05-01\",\n    \"occurrences\": 5,\n    \"notes\": \"Created via Postman API test\"\n}"
+            },
+            "url": "{{base_url}}/api/actions"
+          }
+        },
+        {
+          "name": "Create Action - Missing Problem (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400 or 500', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 500]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"action\": \"No problem field provided\"\n}"
+            },
+            "url": "{{base_url}}/api/actions"
+          }
+        },
+        {
+          "name": "Update Action Status to Yellow",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Status updated to Y', function() {",
+                  "    pm.expect(pm.response.json().status).to.eql('Y');",
+                  "});",
+                  "",
+                  "pm.test('Progress updated to 50', function() {",
+                  "    pm.expect(pm.response.json().progress).to.eql(50);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"problem\": \"[Postman Test] R1 Bridge recurring in 5 lots - Variant 12144846\",\n    \"status\": \"Y\",\n    \"progress\": 50,\n    \"notes\": \"In progress - updated via Postman\"\n}"
+            },
+            "url": "{{base_url}}/api/actions/{{test_action_id}}"
+          }
+        },
+        {
+          "name": "Delete Action",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('ok is true', function() {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/actions/{{test_action_id}}"
+          }
+        },
+        {
+          "name": "Action - Viewer Cannot Create (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 or 403', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"problem\": \"Should be rejected - viewer has no permission\"\n}"
+            },
+            "url": "{{base_url}}/api/actions",
+            "description": "Login as viewer first, then run this request"
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Users",
+      "description": "User management - Admin only",
+      "item": [
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('At least 3 default users exist', function() {",
+                  "    pm.expect(pm.response.json().length).to.be.at.least(3);",
+                  "});",
+                  "",
+                  "pm.test('No password_hash in response', function() {",
+                  "    pm.response.json().forEach(function(u) {",
+                  "        pm.expect(u).to.not.have.property('password_hash');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/users"
+          }
+        },
+        {
+          "name": "Create New User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Username matches', function() {",
+                  "    pm.expect(pm.response.json().username).to.eql('postman_test_user');",
+                  "});",
+                  "",
+                  "pm.test('Role is viewer', function() {",
+                  "    pm.expect(pm.response.json().role).to.eql('viewer');",
+                  "});",
+                  "",
+                  "pm.test('No password_hash exposed', function() {",
+                  "    pm.expect(pm.response.json()).to.not.have.property('password_hash');",
+                  "});",
+                  "",
+                  "pm.environment.set('test_user_id', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"postman_test_user\",\n    \"password\": \"test1234\",\n    \"role\": \"viewer\",\n    \"full_name\": \"Postman Test User\"\n}"
+            },
+            "url": "{{base_url}}/api/users"
+          }
+        },
+        {
+          "name": "Create User - Duplicate Username (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 Conflict', function() {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"test1234\",\n    \"role\": \"viewer\"\n}"
+            },
+            "url": "{{base_url}}/api/users"
+          }
+        },
+        {
+          "name": "Update User Role",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Role updated to editor', function() {",
+                  "    pm.expect(pm.response.json().role).to.eql('editor');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role\": \"editor\",\n    \"full_name\": \"Postman Test User - Updated\"\n}"
+            },
+            "url": "{{base_url}}/api/users/{{test_user_id}}"
+          }
+        },
+        {
+          "name": "Delete Test User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('ok is true', function() {",
+                  "    pm.expect(pm.response.json().ok).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/users/{{test_user_id}}"
+          }
+        },
+        {
+          "name": "Users - Viewer Forbidden (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 or 403', function() {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/users",
+            "description": "Login as viewer first, then run"
+          }
+        }
+      ]
+    }
+  ]
+}
