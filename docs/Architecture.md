@@ -1,7 +1,7 @@
 # System Architecture — SMT AOI Quality Dashboard
 
 ## Overview
-Industrial QA system for SMT AOI production data validation.
+QA Project for SMT AOI production data validation.
 
 ---
 
