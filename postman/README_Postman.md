@@ -1,5 +1,6 @@
-> **Portfolio Project** | QA Manual Engineer | 2026  
+
 # Postman API Tests — SMT AOI Dashboard
+> **Portfolio Project** | QA Manual Engineer | 2026  
 
 ## Setup
 
