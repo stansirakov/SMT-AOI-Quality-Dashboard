@@ -1,6 +1,6 @@
 # SMT-AOI Quality Dashboard
 > **Portfolio Project** | QA Manual Engineer | 2026  
-> Full-stack quality monitoring system for SMT (Surface Mount Technology) production lines
+> Quality Analysis system for SMT (Surface Mount Technology) production lines
 
 ---
 
