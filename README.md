@@ -4,7 +4,7 @@
 
 ---
 
-## 🔎 Project at a Glance
+##  Project at a Glance
 
 - 55 manual test cases designed and executed
 - 34 API tests (Postman collection)
@@ -14,7 +14,7 @@
 
 ---
 
-## 🧠 Business Problem
+##  Business Problem
 
 Most SMT production environments rely on spreadsheets for quality tracking. This leads to:
 
@@ -27,7 +27,7 @@ This project replaces that workflow with a structured, testable QA system that e
 
 ---
 
-## 🎯 Project Purpose
+##  Project Purpose
 
 This system simulates a real SMT production environment and processes AOI (Automated Optical Inspection) data.
 
@@ -42,7 +42,7 @@ It handles:
 
 ---
 
-## 🧪 My QA Role
+##  My QA Role
 
 As QA Engineer, I was responsible for:
 
@@ -55,7 +55,7 @@ As QA Engineer, I was responsible for:
 
 ---
 
-## 📊 QA Impact
+##  QA Impact
 
 - Identified critical KPI calculation issues affecting production reporting accuracy
 - Detected S1/S2 duplication logic defects impacting yield calculations
@@ -65,7 +65,7 @@ As QA Engineer, I was responsible for:
 
 ---
 
-## 🧪 Testing Approach
+##  Testing Approach
 
 | Technique | Application |
 |-----------|-------------|
@@ -78,7 +78,7 @@ As QA Engineer, I was responsible for:
 
 ---
 
-## 🏭 System Workflow
+##  System Workflow
 
 ```
 AOI Machine CSV Export
@@ -97,7 +97,7 @@ Dashboard + API Layer
 
 ---
 
-## 🐛 Bug Summary
+##  Bug Summary
 
 - 11 bugs identified
 - 10 fixed, 1 documented as known limitation
