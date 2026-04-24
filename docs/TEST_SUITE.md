@@ -1,6 +1,6 @@
- 
+ > **Portfolio Project** | QA Manual Engineer | 2026 
 # Test Cases — SMT AOI Quality Dashboard
-> **Portfolio Project** | QA Manual Engineer | 2026 
+
 
 **Project:** SMT AOI Quality Dashboard  
 **Tester:** QA Manual Engineer  
