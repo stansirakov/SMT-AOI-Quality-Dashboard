@@ -1,3 +1,4 @@
+> **Portfolio Project** | QA Manual Engineer | 2026 
 # QA Summary — SMT AOI Quality Dashboard
 
 ## Purpose
