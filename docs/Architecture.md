@@ -1,3 +1,4 @@
+> **Portfolio Project** | QA Manual Engineer | 2026 
 # System Architecture — SMT AOI Quality Dashboard
 
 ## Overview
