@@ -68,7 +68,10 @@ Traces every Use Case → Test Plan Module → Test Cases → Bug Reports.
 | UC-11 | Action from Yield | M-08 | TC-08-02 | — | ✅ |
 | UC-11 | Viewer blocked | M-08 | TC-08-03 | — | ✅ |
 | UC-11 | Persists in DB | M-08 | TC-08-04 | — | ✅ |
+| UC-12 | Manage Users | M-01 | TC-01-07, TC-01-08 | — | ✅ |
+| UC-13 | Filter by Project | M-05 | TC-05-07..09 | — | ✅ |
 | UC-14 | Infinite loop fix | M-05 | TC-05-01 | BUG-004, BUG-005 | ✅ |
+| UC-15 | Change Password | M-01 | TC-01-10 | — | ✅ |
 
 ---
 
