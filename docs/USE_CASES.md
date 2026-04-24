@@ -1,3 +1,4 @@
+> **Portfolio Project** | QA Manual Engineer | 2026 
 # Use Cases — SMT AOI Quality Dashboard
 
 | Field | Value |
