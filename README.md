@@ -4,7 +4,7 @@
 
 ---
 
-##  Project at a Glance
+##  Overview
 
 - 55 manual test cases designed and executed
 - 34 API tests (Postman collection)
