@@ -1,6 +1,6 @@
-
+> **Portfolio Project** | QA Manual Engineer | 2026 
 # Test Plan — SMT AOI Quality Dashboard
-> **Portfolio Project** | QA Manual Engineer | 2026  
+
 
 | Field | Value |
 |-------|-------|
